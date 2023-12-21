@@ -12,7 +12,6 @@ export class InteractionCreateHandler {
         once: false
     })
     async interactionCreateHandler(interaction: Interaction<CacheType>) {
-        console.log(this);
         if (!interaction.client.commands) return;
         if (!interaction.isChatInputCommand()) return;
         const commandData = interaction.client.commands.get(interaction.commandName);
