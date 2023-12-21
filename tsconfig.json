@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    // Language and Environment
+		"experimentalDecorators": true,
+		"target": "ESNext",
+		"useDefineForClassFields": true,
+
+    // Emit
+    "declaration": true,
+    "declarationMap": true,
+    "importHelpers": false,
+    "noEmitHelpers": true,
+    "outDir": "dist",
+    "removeComments": false,
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+
+    // Modules
+    "allowArbitraryExtensions": false,
+    "allowImportingTsExtensions": false,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "resolvePackageJsonExports": true,
+    "resolvePackageJsonImports": true,
+
+    // Type Checking
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
