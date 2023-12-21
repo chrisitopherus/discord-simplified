@@ -23,6 +23,7 @@ export interface EventInformation {
     once: boolean;
     methodKey: string;
     handler: DiscordEventHandler;
+    owner: EventHandler;
 }
 
 /**

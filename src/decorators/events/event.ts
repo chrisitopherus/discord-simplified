@@ -17,7 +17,13 @@ export function On<K extends keyof ClientEvents = keyof ClientEvents>(eventInfo:
 
         Reflect.defineMetadata(
             MetadataKey.OnEvent,
-            { name: eventInfo.name, methodKey: propertyKey, once: eventInfo.once, handler: method } satisfies EventInformation,
+            {
+                name: eventInfo.name,
+                methodKey: propertyKey,
+                once: eventInfo.once,
+                handler: method,
+                owner: target
+            } satisfies EventInformation,
             target,
             propertyKey);
     };

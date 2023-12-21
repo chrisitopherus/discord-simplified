@@ -64,9 +64,9 @@ export class Bot {
         if (!events) return;
         for (const event of events) {
             if (event.once) {
-                this.client.once(event.name, event.handler);
+                this.client.once(event.name, event.handler.bind(event.owner));
             } else {
-                this.client.on(event.name, event.handler);
+                this.client.on(event.name, event.handler.bind(event.owner));
             }
         }
     }
