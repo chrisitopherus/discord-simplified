@@ -45,7 +45,8 @@ export class InteractionCreateHandler {
 
             await this.handleRawInteraction(commandData, interaction, resolver);
         } catch (err: any) {
-            throw new err;
+            // Error Handling
+            throw new Error(err.message);
         }
     }
 
