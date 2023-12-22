@@ -24,54 +24,28 @@ export class InteractionCreateHandler {
         const options = interaction.options as CommandInteractionOptionResolver;
         const resolver = new OptionResolver(options);
         const group = options.getSubcommandGroup();
-        if (group !== null) {
-            await this.handleGroupInteraction(commandData, group, options, interaction, resolver);
-            return;
-        }
-
-        let subcommand: string | undefined;
         try {
-            subcommand = options.getSubcommand();
-        }
-        catch (err) {
-            // No subcommands
-        }
-
-        if (subcommand !== undefined) {
-            await this.handlesubcommandInteraction(commandData, subcommand, interaction, resolver);
-            return;
-        }
-
-        await this.handleRawInteraction(commandData, interaction, resolver);
-
-        const subcommandAmount = commandData.subcommands.size;
-        if (subcommandAmount === 0) {
-            try {
-                resolver.resolve(commandData.command, commandData.options);
-                if (commandData.command.execute) {
-                    await commandData.command.execute(interaction);
-                } else {
-                    throw new Error("Command is missing an execute method.");
-                }
-            } catch (error: any) {
-                // Error Handler
-            }
-        } else {
-            const options = interaction.options as CommandInteractionOptionResolver;
-            const resolver = new OptionResolver(options);
-            const subCommand = options.getSubcommand();
-            const subCommandData = commandData.subcommands.get(subCommand);
-            if (!subCommandData) {
-                // Error Handler
+            if (group !== null) {
+                await this.handleGroupInteraction(commandData, group, options, interaction, resolver);
                 return;
             }
 
+            let subcommand: string | undefined;
             try {
-                resolver.resolve(subCommandData.command, subCommandData.options);
-                await subCommandData.command.execute(interaction);
-            } catch (error: any) {
-                // Error Handler
+                subcommand = options.getSubcommand();
             }
+            catch (err) {
+                // No subcommands
+            }
+
+            if (subcommand !== undefined) {
+                await this.handlesubcommandInteraction(commandData, subcommand, interaction, resolver);
+                return;
+            }
+
+            await this.handleRawInteraction(commandData, interaction, resolver);
+        } catch (err: any) {
+            throw new err;
         }
     }
 

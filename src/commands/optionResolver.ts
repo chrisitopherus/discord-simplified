@@ -7,7 +7,7 @@ export class OptionResolver {
     resolve(command: DiscordCommand | DiscordSubcommand, options: Map<string, OptionInfo>) {
         for (const [prop, option] of options.entries()) {
             const value = this.getOption(prop, option.type);
-            command["prop"] = value;
+            command[prop] = value;
         }
     }
 
