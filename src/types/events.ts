@@ -3,7 +3,9 @@ import { ClientEvents } from "discord.js";
 /**
  * Defines the structure of an event handler. (All objects are valid.)
  */
-export interface EventHandler { }
+export interface EventHandler {
+    [key: string]: DiscordEventHandler | any;
+}
 
 /**
  * Defines the structure of an event handler. (All classes are valid.)
@@ -22,7 +24,6 @@ export interface EventInformation {
     name: keyof ClientEvents;
     once: boolean;
     methodKey: string;
-    handler: DiscordEventHandler;
     owner: EventHandler;
 }
 

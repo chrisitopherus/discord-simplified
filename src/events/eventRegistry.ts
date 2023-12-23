@@ -1,6 +1,6 @@
-import { EventHandlerClass, EventInformation,  } from "../types/events";
+import { EventHandler, EventHandlerClass, EventInformation,  } from "../types/events";
 export interface EventRegistryItem {
-    constructor: EventHandlerClass;
+    instance: EventHandler;
     events: Map<string, EventInformation>;
 }
 
@@ -9,7 +9,7 @@ export class EventRegistry {
     registerEventHandler(constructor: EventHandlerClass) {
         const event = this._events.get(constructor);
         if (!event) {
-            this._events.set(constructor, { constructor: constructor, events: new Map() });
+            this._events.set(constructor, { instance: new constructor(), events: new Map() });
         }
     }
 
