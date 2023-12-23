@@ -1,6 +1,6 @@
 {
   "name": "discord-simplified",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Simple discord.js wrapper.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
