@@ -7,12 +7,14 @@ import { EventLoader } from "../events/eventLoader";
 import { EventRegistry } from "../events/eventRegistry";
 import { InteractionCreateHandler } from "../events/interactionCreateEvent";
 import { ErrorHandlerRegistry, ErrorType } from "../utility/errorHandlerRegistry";
+import { CommandDeployer } from "./commandDeployer.js";
 /**
  * Wrapper for discord.js's Client class.
  */
 export class Bot {
     public readonly client: Client;
     public commands: Collection<string, DiscordCommandInformation> | undefined;
+    private readonly _commandDeployer: CommandDeployer | undefined;
     private readonly _configuration: BotConfig;
     private readonly _cmdLoader = CommandLoader;
     private readonly _eventLoader = EventLoader;
@@ -26,6 +28,9 @@ export class Bot {
         if (this._configuration.commands) {
             this._commandRegistry = this._cmdLoader.load(this._configuration.commands);
             this.initializeCommands();
+            if (this.commands) {
+                this._commandDeployer = new CommandDeployer(this.commands);
+            }
         }
 
         const events = [InteractionCreateHandler];
@@ -50,10 +55,15 @@ export class Bot {
     }
 
     /**
-     * @todo Implementation
+     * Deploys the commands of the bot.
+     * @param info The needed information about the deployment.
      */
-    public async deploy() {
-        throw new Error("Not implemented.");
+    public async deploy(info: { token: string, clientId: string, guildId?: string }) {
+        if (this._commandDeployer === undefined) {
+            throw new Error("Bot has no valid commands.");
+        }
+
+        await this._commandDeployer.deploy(info);
     }
 
     /**
