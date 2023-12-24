@@ -6,7 +6,6 @@ import { DiscordCommandInformation } from "../types/commands";
 
 @EventHandler
 export class InteractionCreateHandler {
-
     @On({
         name: "interactionCreate",
         once: false
@@ -17,7 +16,7 @@ export class InteractionCreateHandler {
         const commandData = interaction.client.commands.get(interaction.commandName);
 
         if (!commandData) {
-            // Error Handler
+            console.error(`No command matching ${interaction.commandName} was found.`);
             return;
         }
 
@@ -44,9 +43,13 @@ export class InteractionCreateHandler {
             }
 
             await this.handleRawInteraction(commandData, interaction, resolver);
-        } catch (err: any) {
-            // Error Handling
-            throw new Error(err.message);
+        } catch (error: any) {
+            console.error(error.message);
+            if (interaction.replied || interaction.deferred) {
+                await interaction.followUp({ content: "There was an error while executing this command!", ephemeral: true });
+            } else {
+                await interaction.reply({ content: "There was an error while executing this command!", ephemeral: true });
+            }
         }
     }
 
@@ -54,15 +57,12 @@ export class InteractionCreateHandler {
         resolver.resolve(commandInformation.command, commandInformation.options);
         if (commandInformation.command.execute) {
             await commandInformation.command.execute(interaction);
-        } else {
-            // Error Handler
         }
     }
 
     async handlesubcommandInteraction(commandInformation: DiscordCommandInformation, subCommand: string, interaction: CommandInteraction, resolver: OptionResolver) {
         const subCommandData = commandInformation.subcommands.get(subCommand);
         if (!subCommandData) {
-            // Error Handler
             return;
         }
 
@@ -73,7 +73,6 @@ export class InteractionCreateHandler {
     async handleGroupInteraction(commandInformation: DiscordCommandInformation, group: string, options: CommandInteractionOptionResolver, interaction: CommandInteraction, resolver: OptionResolver) {
         const groupCommandData = commandInformation.groups.get(group);
         if (!groupCommandData) {
-            // Error Handler
             return;
         }
 
@@ -86,13 +85,11 @@ export class InteractionCreateHandler {
         }
 
         if (subcommand === undefined) {
-            // Error Handler
             return;
         }
 
         const subcommandData = groupCommandData.subcommands.get(subcommand);
         if (!subcommandData) {
-            // Error Handler
             return;
         }
 

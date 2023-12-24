@@ -6,7 +6,6 @@ import { DiscordCommandInformation } from "../types/commands";
 import { EventLoader } from "../events/eventLoader";
 import { EventRegistry } from "../events/eventRegistry";
 import { InteractionCreateHandler } from "../events/interactionCreateEvent";
-import { ErrorHandlerRegistry, ErrorType } from "../utility/errorHandlerRegistry";
 import { CommandDeployer } from "./commandDeployer.js";
 /**
  * Wrapper for discord.js's Client class.
@@ -20,7 +19,6 @@ export class Bot {
     private readonly _eventLoader = EventLoader;
     private _commandRegistry: CommandRegistry | undefined;
     private _eventRegistry: EventRegistry | undefined;
-    private readonly _errorHandlerRegistry = ErrorHandlerRegistry;
 
     public constructor(configuration: BotConfig) {
         this._configuration = configuration;
@@ -37,11 +35,6 @@ export class Bot {
         if (this._configuration.events) {
             this._eventRegistry = this._eventLoader.load([...this._configuration.events, ...events]);
             this.initializeEvents();
-        }
-
-        if (configuration.interactionCreateErrorHandler) {
-            this._errorHandlerRegistry.register(ErrorType.UnhandledErrorInInteraction, configuration.interactionCreateErrorHandler);
-            this._errorHandlerRegistry.register(ErrorType.UnknownCommandInInteraction, configuration.interactionCreateErrorHandler);
         }
     }
 

@@ -6,10 +6,6 @@ export { Option } from "./decorators/commands/option";
 export { On } from "./decorators/events/event";
 export { EventHandler } from "./decorators/events/eventHandler";
 
-// error handling
-export { ErrorType } from "./utility/errorHandlerRegistry";
-export type { InteractionErrorHandler } from "./types/bot";
-
 // helpers
 export type { DiscordCommand, DiscordSubcommand, DiscordSubcommandGroup } from "./types/commands";
 
