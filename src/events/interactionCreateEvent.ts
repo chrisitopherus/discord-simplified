@@ -44,7 +44,7 @@ export class InteractionCreateHandler {
 
             await this.handleRawInteraction(commandData, interaction, resolver);
         } catch (error: any) {
-            console.error(error.message);
+            console.error(error);
             if (interaction.replied || interaction.deferred) {
                 await interaction.followUp({ content: "There was an error while executing this command!", ephemeral: true });
             } else {
