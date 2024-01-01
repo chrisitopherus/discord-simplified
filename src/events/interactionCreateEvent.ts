@@ -20,6 +20,15 @@ export class InteractionCreateHandler {
             return;
         }
 
+        if (commandData.whitelist && !commandData.whitelist.ids.includes(interaction.user.id)) {
+            interaction.reply({
+                content: commandData.whitelist.messageCreator(interaction),
+                ephemeral: commandData.whitelist.ephemeral
+            });
+            
+            return;
+        }
+
         const options = interaction.options as CommandInteractionOptionResolver;
         const resolver = new OptionResolver(options);
         const group = options.getSubcommandGroup();

@@ -1,4 +1,4 @@
-import { CommandClass, CommandInformation, OptionInfo, SubcommandGroupClass, SubcommandGroupInformation, SubcommandInformation } from "../types/commands";
+import { CommandClass, CommandInformation, OptionInfo, SubcommandGroupClass, SubcommandGroupInformation, SubcommandInformation, WhitelistInformation } from "../types/commands";
 import { MetadataKey } from "../utility/metadata";
 import { CommandRegistry } from "./commandRegistry";
 export class CommandLoader {
@@ -12,6 +12,7 @@ export class CommandLoader {
             }
 
             const command = new commandClass();
+
             // Register the command
             cmdRegistry.registerCommand(commandClass, commandInfo);
 
@@ -28,12 +29,16 @@ export class CommandLoader {
 
             // Load groups
             this.loadSubcommandGroups(cmdRegistry, commandClass, commandInfo);
+
+            // Load whitelist
+            this.loadWhitelist(cmdRegistry, commandClass, commandInfo.whitelist);
         });
 
         return cmdRegistry;
     }
 
     private static loadSubcommands(cmdRegistry: CommandRegistry, commandClass: CommandClass, commandInfo: CommandInformation) {
+        if (commandInfo.subcommands === undefined) return;
         commandInfo.subcommands.forEach((subcommandClass) => {
             const subCommandInfo = Reflect.getMetadata(MetadataKey.SubCommand, subcommandClass) as SubcommandInformation;
             if (!subCommandInfo) {
@@ -76,6 +81,7 @@ export class CommandLoader {
     }
 
     private static loadSubcommandGroups(cmdRegistry: CommandRegistry, commandClass: CommandClass, commandInfo: CommandInformation) {
+        if (commandInfo.groups === undefined) return;
         commandInfo.groups.forEach((groupClass) => {
             const groupInfo = Reflect.getMetadata(MetadataKey.SubCommandGroup, groupClass) as SubcommandGroupInformation;
             if (!groupInfo) {
@@ -87,5 +93,9 @@ export class CommandLoader {
 
             this.loadSubcommandsOfGroup(cmdRegistry, commandClass, groupClass, groupInfo);
         });
+    }
+
+    private static loadWhitelist(cmdRegistry: CommandRegistry, commandClass: CommandClass, whitelist: WhitelistInformation | undefined) {
+        if (whitelist) cmdRegistry.registerWhitelist(commandClass, whitelist);
     }
 }

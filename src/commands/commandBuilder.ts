@@ -1,5 +1,5 @@
 import { Collection, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandNumberOption, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "discord.js";
-import { DiscordCommand, DiscordCommandInformation, DiscordSubcommandGroupInformation, DiscordSubcommandInformation, OptionInfo } from "../types/commands";
+import { DiscordCommand, DiscordCommandInformation, DiscordSubcommandGroupInformation, DiscordSubcommandInformation, OptionInfo, WhitelistInformation } from "../types/commands";
 import { CommandRegistryItem, SubcommandRegistryItem, SubcommandGroupRegistryItem } from "./commandRegistry";
 
 interface OptionData {
@@ -53,7 +53,8 @@ export class CommandBuilder {
             command,
             options: data.options,
             subcommands: subcommandCollection,
-            groups: groupCollection
+            groups: groupCollection,
+            whitelist: data.whitelist ? this.transformToRequiredWhitelist(data.whitelist) : undefined
         };
     }
 
@@ -72,6 +73,14 @@ export class CommandBuilder {
         return new SlashCommandSubcommandGroupBuilder()
             .setName(data.information.name)
             .setDescription(data.information.description);
+    }
+
+    private static transformToRequiredWhitelist(whitelist: WhitelistInformation): Required<WhitelistInformation> {
+        return {
+            ids: whitelist.ids,
+            messageCreator: whitelist.messageCreator,
+            ephemeral: whitelist.ephemeral ? true : false
+        };
     }
 
     private static createOption(cmdBuilder: SlashCommandSubcommandBuilder | SlashCommandBuilder, data: OptionData) {

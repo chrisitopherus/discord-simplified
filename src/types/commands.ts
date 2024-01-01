@@ -29,11 +29,50 @@ export interface DiscordSubcommandGroup { }
  * Defines the information about a command.
  */
 export interface CommandInformation {
+    /**
+     * Name of the command.
+     */
     name: string;
+    /**
+     * Description of the command.
+     */
     description: string;
-    subcommands: SubcommandClass[];
-    groups: SubcommandGroupClass[];
+    /**
+     * Specify subcommands for the command.
+     */
+    subcommands?: SubcommandClass[];
+    /**
+     * Specify subcommand groups for the command.
+     */
+    groups?: SubcommandGroupClass[];
+    /**
+     * Specify a whitelist for the commands.
+     */
+    whitelist?: WhitelistInformation;
 }
+
+/**
+ * Represents a whitelist for a command.
+ */
+export interface WhitelistInformation {
+    /**
+     * Specify ids that are allowed to use the command.
+     */
+    ids: string[];
+    /**
+     * Specify the message creator for interaction that are not whitelisted.
+     */
+    messageCreator: WhitelistMessageCreator;
+    /**
+     * Specify if the message should be sent as an `Ephemeral` response.
+     */
+    ephemeral?: boolean;
+}
+
+/**
+ * Represents a message creator for interaction that are not whitelisted.
+ */
+export type WhitelistMessageCreator = (interaction: CommandInteraction) => string;
 
 /**
  * Defines the information about a subcommand.
@@ -136,6 +175,7 @@ export interface DiscordCommandInformation {
     command: DiscordCommand;
     subcommands: Collection<string, DiscordSubcommandInformation>;
     groups: Collection<string, DiscordSubcommandGroupInformation>;
+    whitelist: Required<WhitelistInformation> | undefined;
 }
 
 /**

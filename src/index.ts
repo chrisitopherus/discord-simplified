@@ -7,7 +7,7 @@ export { On } from "./decorators/events/event";
 export { EventHandler } from "./decorators/events/eventHandler";
 
 // helpers
-export type { DiscordCommand, DiscordSubcommand, DiscordSubcommandGroup } from "./types/commands";
+export type { DiscordCommand, DiscordSubcommand, DiscordSubcommandGroup, WhitelistMessageCreator, WhitelistInformation } from "./types/commands";
 
 // bot
 export { Bot } from "./bot/bot";

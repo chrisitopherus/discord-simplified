@@ -1,5 +1,5 @@
 import { Collection } from "discord.js";
-import { CommandClass, CommandInformation, DiscordCommandInformation, OptionInfo, SubcommandClass, SubcommandGroupClass, SubcommandInformation, SubcommandGroupInformation } from "../types/commands";
+import { CommandClass, CommandInformation, DiscordCommandInformation, OptionInfo, SubcommandClass, SubcommandGroupClass, SubcommandInformation, SubcommandGroupInformation, WhitelistInformation } from "../types/commands";
 import { CommandBuilder } from "./commandBuilder";
 
 export interface CommandRegistryItem {
@@ -8,6 +8,7 @@ export interface CommandRegistryItem {
     options: Map<string, OptionInfo>;
     subcommands: Map<SubcommandClass, SubcommandRegistryItem>;
     groups: Map<SubcommandGroupClass, SubcommandGroupRegistryItem>,
+    whitelist?: WhitelistInformation;
 }
 
 export interface SubcommandRegistryItem {
@@ -38,7 +39,7 @@ export class CommandRegistry {
                     information,
                     options: new Map(),
                     subcommands: new Map(),
-                    groups: new Map()
+                    groups: new Map(),
                 });
         }
     }
@@ -126,6 +127,15 @@ export class CommandRegistry {
         }
 
         subcmd.options.set(optionKey, optionInfo);
+    }
+
+    registerWhitelist(command: CommandClass, whitelist: WhitelistInformation) {
+        const cmd = this._commands.get(command);
+        if (!cmd) {
+            throw new Error("Encountered whitelist declaration outside of a command.");
+        }
+
+        cmd.whitelist = whitelist;
     }
 
     isRegistered(constructor: CommandClass): boolean {
