@@ -125,6 +125,8 @@ export interface StringOptionInfo extends BaseOptionInfo {
  */
 export interface NumberOptionInfo extends BaseOptionInfo {
     type: "Number";
+    min?: number;
+    max?: number;
     choices?: OptionChoice<number>[];
 }
 
@@ -133,6 +135,8 @@ export interface NumberOptionInfo extends BaseOptionInfo {
  */
 export interface IntegerOptionInfo extends BaseOptionInfo {
     type: "Integer";
+    min?: number;
+    max?: number;
     choices?: OptionChoice<number>[];
 }
 

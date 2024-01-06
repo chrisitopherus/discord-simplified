@@ -107,6 +107,7 @@ export class CommandBuilder {
             .setName(data.prop)
             .setDescription(data.info.description)
             .setRequired(data.info.isRequired);
+
         if (data.info.choices && data.info.choices.length > 0) {
             option.addChoices(...data.info.choices);
         }
@@ -124,6 +125,14 @@ export class CommandBuilder {
             .setDescription(data.info.description)
             .setRequired(data.info.isRequired);
 
+        if (data.info.min !== undefined) {
+            option.setMinValue(data.info.min);
+        }
+
+        if (data.info.max !== undefined) {
+            option.setMaxValue(data.info.max);
+        }
+
         if (data.info.choices && data.info.choices.length > 0) {
             option.addChoices(...data.info.choices);
         }
@@ -140,6 +149,14 @@ export class CommandBuilder {
             .setName(data.prop)
             .setDescription(data.info.description)
             .setRequired(data.info.isRequired);
+
+        if (data.info.min !== undefined) {
+            option.setMinValue(data.info.min);
+        }
+
+        if (data.info.max !== undefined) {
+            option.setMaxValue(data.info.max);
+        }
 
         if (data.info.choices && data.info.choices.length > 0) {
             option.addChoices(...data.info.choices);
