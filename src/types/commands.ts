@@ -78,17 +78,40 @@ export type WhitelistMessageCreator = (interaction: CommandInteraction) => strin
  * Defines the information about a subcommand.
  */
 export interface SubcommandInformation {
+    /**
+     * Name of the subcommand.
+     */
     name: string;
+    /**
+     * Description of the subcommand
+     */
     description: string;
+    /**
+     * Specify a whitelist for the subcommand.
+     */
+    whitelist?: WhitelistInformation;
 }
 
 /**
  * Defines the information about a subcommand group.
  */
 export interface SubcommandGroupInformation {
+    /**
+     * The name of the group.
+     */
     name: string;
+    /**
+     * The description of the group.
+     */
     description: string;
+    /**
+     * Specify the subcommands of the group.
+     */
     subcommands: SubcommandClass[];
+    /**
+     * Specify a whitelist for the group.
+     */
+    whitelist?: WhitelistInformation;
 }
 
 /**
@@ -188,6 +211,7 @@ export interface DiscordCommandInformation {
 export interface DiscordSubcommandInformation {
     options: Map<string, OptionInfo>;
     command: DiscordSubcommand;
+    whitelist: Required<WhitelistInformation> | undefined;
 }
 
 /**
@@ -196,4 +220,5 @@ export interface DiscordSubcommandInformation {
 export interface DiscordSubcommandGroupInformation {
     command: DiscordSubcommandGroup;
     subcommands: Collection<string, DiscordSubcommandInformation>;
+    whitelist: Required<WhitelistInformation> | undefined;
 }

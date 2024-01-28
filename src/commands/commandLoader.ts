@@ -1,4 +1,4 @@
-import { CommandClass, CommandInformation, OptionInfo, SubcommandGroupClass, SubcommandGroupInformation, SubcommandInformation, WhitelistInformation } from "../types/commands";
+import { CommandClass, CommandInformation, OptionInfo, SubcommandGroupClass, SubcommandGroupInformation, SubcommandInformation } from "../types/commands";
 import { MetadataKey } from "../utility/metadata";
 import { CommandRegistry } from "./commandRegistry";
 export class CommandLoader {
@@ -29,9 +29,6 @@ export class CommandLoader {
 
             // Load groups
             this.loadSubcommandGroups(cmdRegistry, commandClass, commandInfo);
-
-            // Load whitelist
-            this.loadWhitelist(cmdRegistry, commandClass, commandInfo.whitelist);
         });
 
         return cmdRegistry;
@@ -72,7 +69,7 @@ export class CommandLoader {
 
             // Load options
             Object.getOwnPropertyNames(command).forEach((prop) => {
-                const optionInfo = Reflect.getMetadata(MetadataKey.Option, command, prop);
+                const optionInfo = Reflect.getMetadata(MetadataKey.Option, command, prop) as OptionInfo;
                 if (optionInfo) {
                     cmdRegistry.registerSubcommandOptionOfGroup(commandClass, groupClass, subcommandClass, prop, optionInfo);
                 }
@@ -93,9 +90,5 @@ export class CommandLoader {
 
             this.loadSubcommandsOfGroup(cmdRegistry, commandClass, groupClass, groupInfo);
         });
-    }
-
-    private static loadWhitelist(cmdRegistry: CommandRegistry, commandClass: CommandClass, whitelist: WhitelistInformation | undefined) {
-        if (whitelist) cmdRegistry.registerWhitelist(commandClass, whitelist);
     }
 }

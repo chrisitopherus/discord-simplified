@@ -21,7 +21,8 @@ export class CommandBuilder {
         for (const [subcommand, item] of data.subcommands.entries()) {
             subcommandCollection.set(item.information.name, {
                 command: new subcommand(),
-                options: item.options
+                options: item.options,
+                whitelist: item.information.whitelist ? this.transformToRequiredWhitelist(item.information.whitelist) : undefined
             });
 
             cmdBuilder.addSubcommand(this.createSubcommand(item));
@@ -34,7 +35,8 @@ export class CommandBuilder {
             for (const [subcommand, item] of groupItem.subcommands.entries()) {
                 groupSubcommandCollection.set(item.information.name, {
                     command: new subcommand(),
-                    options: item.options
+                    options: item.options,
+                    whitelist: item.information.whitelist ? this.transformToRequiredWhitelist(item.information.whitelist) : undefined
                 });
 
                 groupBuilder.addSubcommand(this.createSubcommand(item));
@@ -44,7 +46,8 @@ export class CommandBuilder {
 
             groupCollection.set(groupItem.information.name, {
                 command: new group(),
-                subcommands: groupSubcommandCollection
+                subcommands: groupSubcommandCollection,
+                whitelist: groupItem.information.whitelist ? this.transformToRequiredWhitelist(groupItem.information.whitelist) : undefined
             });
         }
 
@@ -54,7 +57,7 @@ export class CommandBuilder {
             options: data.options,
             subcommands: subcommandCollection,
             groups: groupCollection,
-            whitelist: data.whitelist ? this.transformToRequiredWhitelist(data.whitelist) : undefined
+            whitelist: data.information.whitelist ? this.transformToRequiredWhitelist(data.information.whitelist) : undefined
         };
     }
 

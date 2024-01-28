@@ -21,7 +21,7 @@ export class InteractionCreateHandler {
         }
 
         if (commandData.whitelist && !commandData.whitelist.ids.includes(interaction.user.id)) {
-            interaction.reply({
+            await interaction.reply({
                 content: commandData.whitelist.messageCreator(interaction),
                 ephemeral: commandData.whitelist.ephemeral
             });
@@ -47,7 +47,7 @@ export class InteractionCreateHandler {
             }
 
             if (subcommand !== undefined) {
-                await this.handlesubcommandInteraction(commandData, subcommand, interaction, resolver);
+                await this.handleSubcommandInteraction(commandData, subcommand, interaction, resolver);
                 return;
             }
 
@@ -73,19 +73,37 @@ export class InteractionCreateHandler {
         }
     }
 
-    async handlesubcommandInteraction(commandInformation: DiscordCommandInformation, subCommand: string, interaction: CommandInteraction, resolver: OptionResolver) {
-        const subCommandData = commandInformation.subcommands.get(subCommand);
-        if (!subCommandData) {
+    async handleSubcommandInteraction(commandInformation: DiscordCommandInformation, subCommand: string, interaction: CommandInteraction, resolver: OptionResolver) {
+        const subcommandData = commandInformation.subcommands.get(subCommand);
+        if (!subcommandData) {
             return;
         }
 
-        resolver.resolve(subCommandData.command, subCommandData.options);
-        await subCommandData.command.execute(interaction);
+        if (subcommandData.whitelist && !subcommandData.whitelist.ids.includes(interaction.user.id)) {
+            await interaction.reply({
+                content: subcommandData.whitelist.messageCreator(interaction),
+                ephemeral: subcommandData.whitelist.ephemeral
+            });
+            
+            return;
+        }
+
+        resolver.resolve(subcommandData.command, subcommandData.options);
+        await subcommandData.command.execute(interaction);
     }
 
     async handleGroupInteraction(commandInformation: DiscordCommandInformation, group: string, options: CommandInteractionOptionResolver, interaction: CommandInteraction, resolver: OptionResolver) {
         const groupCommandData = commandInformation.groups.get(group);
         if (!groupCommandData) {
+            return;
+        }
+
+        if (groupCommandData.whitelist && !groupCommandData.whitelist.ids.includes(interaction.user.id)) {
+            await interaction.reply({
+                content: groupCommandData.whitelist.messageCreator(interaction),
+                ephemeral: groupCommandData.whitelist.ephemeral
+            });
+            
             return;
         }
 
@@ -103,6 +121,15 @@ export class InteractionCreateHandler {
 
         const subcommandData = groupCommandData.subcommands.get(subcommand);
         if (!subcommandData) {
+            return;
+        }
+
+        if (subcommandData.whitelist && !subcommandData.whitelist.ids.includes(interaction.user.id)) {
+            await interaction.reply({
+                content: subcommandData.whitelist.messageCreator(interaction),
+                ephemeral: subcommandData.whitelist.ephemeral
+            });
+            
             return;
         }
 
